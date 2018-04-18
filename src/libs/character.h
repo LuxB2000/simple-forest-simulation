@@ -8,13 +8,7 @@
 #include <boost/bind.hpp>
 #include <iostream>
 #include <unordered_map>
-
-/** TODO: Move **/
-namespace character_client{
-enum CharacterE{
-	tree, man
-};
-}
+#include "myforest.h"
 
 /**
  * A Character is a generic element of the simulation. It is defined by:
@@ -36,14 +30,14 @@ struct character_t{
 	std::string uid;
 };
 // print the information relative to a character.
-std::ostream& operator<<(std::ostream& os, const character_t c)
+/*std::ostream& operator<<(std::ostream& os, const character_t c)
 {
 	os << "Character @{" +
 				std::to_string(c.positions[0]) + "," + 
 				std::to_string(c.positions[1]) +
 			"}";
 	return os;
-}
+}*/
 /**
  * Represent any individual acting in the world.
  * This class contains pure virtual functions.
@@ -53,7 +47,7 @@ class Character{
 public:
 
 	// output signal to send information to world regards a creation of an other character.
-	boost::signals2::signal<void(character_client::CharacterE, CharacterT*)> add_sig;
+	boost::signals2::signal<void(CharacterE, CharacterT*)> add_sig;
 
 	// default constructor
 	Character(const CharacterT& data): m_uid(boost::lexical_cast<std::string>(boost::uuids::random_generator()()))
@@ -95,84 +89,6 @@ protected:
 	CharacterT m_data; // the data defining a particular character
 };
 
-/*
- * The information relative to the Tree
- */
-struct tree_t : character_t{
-	unsigned long age;
-};
-std::ostream& operator<<(std::ostream& os, const tree_t t)
-{
-	os << "Tree @{" + 
-				std::to_string(t.positions[0]) + "," + 
-				std::to_string(t.positions[1]) +
-			"} age:" + std::to_string(t.age); 
-	return os;
 }
 
-class Tree: public Character<tree_t>{
-public:
-using TreeT = std::unique_ptr<Tree, void(*) (Tree*)>;
-using trees_vector_t = std::unordered_map<std::string, TreeT>;
-	Tree(const tree_t& data) ;
-	Tree(const Tree& t) ;
-	// the smart pointer comes with his own delete 
-	static void TreeDel (Tree* t);
-	~Tree();
-	
-
-	// Virutal functions
-	// time passed
-	void TimePassed();
-	// print the tree information
-	virtual std::string Print() &;
-
-private:
-};
-}
-// compare Tree with string.
-inline bool operator==(const std::unique_ptr<forest::Tree>& lhs, const std::string& rhs)
-{
-	return lhs->GetID() == rhs;
-}
-inline bool operator==(const std::string& lhs, const std::unique_ptr<forest::Tree>& rhs)
-{
-	return lhs == rhs->GetID();
-}
-
-// constructor
-forest::Tree::Tree(const tree_t& data) : Character<forest::tree_t>(data)
-{
-
-}
-forest::Tree::Tree(const Tree& t) : Character<forest::tree_t>(t.GetInfo())
-{
-
-}
-// destructor
-forest::Tree::~Tree()
-{
-
-}
-// time passed
-void forest::Tree::TimePassed()
-{
-	this->m_data.age += 1 ;
-	// todo: run a seed with a known probablity
-	// todo: find correct place
-	//tree_t new_tree; new_tree.positions = {1,2}; new_tree.age = 0;
-	//this->add_sig(character_client::CharacterE::tree, &new_tree);
-}
-// printing function
-std::string forest::Tree::Print() &
-{
-	return 	"{[" +
-			std::to_string(this->m_data.positions[0]) + "," + std::to_string(this->m_data.positions[1]) + "], " +
-			"age: " + std::to_string(this->m_data.age) +
-		"}";
-}
-void forest::Tree::TreeDel (Tree* t) {
-	std::cout<< "... Goodbye, you were a lovely tree." << std::endl;
-	delete t;
-};
 #endif

@@ -7,7 +7,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # add src
 set (CODE_SRC_PATH ${CMAKE_SOURCE_DIR}/src)
+set (WOLD_BUILD_PATH ${CMAKE_SOURCE_DIR}/build/src/libs) #todo: use correct variable
+set (WORLD_SRC_PATH ${CMAKE_SOURCE_DIR}/src/libs) #todo: use correct variable
+set (TREE_SRC_PATH ${CMAKE_SOURCE_DIR}/src/libs) #todo: use correct variable
 add_subdirectory(${CODE_SRC_PATH})
+include_directories(${WOLRD_SRC_PATH})
 
 # Unit Tests
 # ==========
@@ -15,13 +19,14 @@ add_subdirectory(${CODE_SRC_PATH})
 set (TESTS_SRC_PATH ${CMAKE_SOURCE_DIR}/tests) #todo: use correct variable
 set (TESTS_BUILD_PATH ${CMAKE_SOURCE_DIR}/build/tests) #todo: use correct variable
 add_subdirectory(${TESTS_SRC_PATH})
+link_directories(${TEST_SRC_PATH})
 
 # delcare the different tests
 set (TESTS "worldT;treeT")
 foreach(test ${TESTS})
 	add_custom_command(
 		OUTPUT ${test}
-		COMMAND clang++ -std=c++14 -o ${TESTS_BUILD_PATH}/${test} ${TESTS_SRC_PATH}/${test}.cpp -lmettle -g
+		COMMAND clang++ -std=c++14 -o ${TESTS_BUILD_PATH}/${test} ${TESTS_SRC_PATH}/${test}.cpp ${WORLD_SRC_PATH}/world.cpp ${TREE_SRC_PATH}/tree.cpp -lmettle -g
 	)
 endforeach(test ${TESTS})
 # create a target to compile and run the unit tests
@@ -36,3 +41,4 @@ add_custom_target(
 SET (DEBUG_FLAG "-g")
 SET (CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${DEBUG_FLAG}")
 add_executable (SimuForest ${CODE_SRC_PATH}/main.cpp )
+target_link_libraries(SimuForest World Tree)

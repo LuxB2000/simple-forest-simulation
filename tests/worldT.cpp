@@ -1,5 +1,7 @@
 #include <mettle.hpp>
-#include "../src/world.h"
+#include "../src/libs/world.h"
+#include "../src/libs/tree.h"
+#include "../src/libs/myforest.h"
 
 using namespace mettle;
 using namespace forest;
@@ -25,11 +27,11 @@ suite<> first("World suite", [](auto &_) {
     auto N = world->GetNumberOfCharacters();
     auto Nt = world->GetNumberOfTrees();
     // inside the character
-    boost::signals2::signal<void(character_client::CharacterE, tree_t*)> creation;
+    boost::signals2::signal<void(CharacterE, tree_t*)> creation;
     // link with the world function
     creation.connect(boost::bind(&World::AddCharacter, world.get(), _1, _2)); // TODO: GetInstance() dans World qui est un singleton
     // triget signal
-    creation(character_client::CharacterE::tree, &ddata);
+    creation(CharacterE::tree, &ddata);
     // check
     expect(world->GetNumberOfCharacters(), equal_to(N+1));
     expect(world->GetNumberOfTrees(), equal_to(Nt+1));
@@ -42,10 +44,10 @@ suite<> first("World suite", [](auto &_) {
     ddata.positions = {0,0};
     ddata.age = 0;
 		std::unique_ptr<World> world (new World());
-    world->AddCharacter(character_client::CharacterE::tree, &ddata);
+    world->AddCharacter(CharacterE::tree, &ddata);
     expect(world->GetLocalPopulationInfo(ddata.positions).trees.size(), equal_to(1));
     // add a second at the same place
-    world->AddCharacter(character_client::CharacterE::tree, &ddata);
+    world->AddCharacter(CharacterE::tree, &ddata);
     expect(world->GetLocalPopulationInfo(ddata.positions).trees.size(), equal_to(2));
   });
   _.test("World Running", [](){
@@ -60,7 +62,7 @@ suite<> first("World suite", [](auto &_) {
     tree_t a_tree;
     a_tree.positions = {0,0}; // position on the landskape
     a_tree.age = 0;
-    world->AddCharacter(character_client::CharacterE::tree, &a_tree);
+    world->AddCharacter(CharacterE::tree, &a_tree);
 
     World::population_info_t pop = world->StartWorld(max_epoch); // run the simulation of the world with a 
     World::population_info_t pop_info = world->GetPopulationInfo();
@@ -79,7 +81,7 @@ suite<> first("World suite", [](auto &_) {
     ddata.positions = {0,0};
     ddata.age = 0;
 		std::unique_ptr<World> world (new World());
-    world->AddCharacter(character_client::CharacterE::tree, &ddata);
+    world->AddCharacter(CharacterE::tree, &ddata);
     auto N = world->GetNumberOfCharacters();
     auto Nt = world->GetNumberOfTrees();
     
