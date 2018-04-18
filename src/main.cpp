@@ -7,7 +7,7 @@ int main(){
 
 	std::unique_ptr<World> world (new World());
 	tree_t a_tree;
-	a_tree.positions = {0,0}; // position on the landskape
+	a_tree.positions = {0,0}; // position on the landsckape
 	a_tree.age = 0;
 	world->AddCharacter(character_client::CharacterE::tree, &a_tree);
 

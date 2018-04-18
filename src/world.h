@@ -84,7 +84,14 @@ private:
 		std::vector<list_charact_t> _map;
 		int _mapSz;
 		map_t(){_map.resize(0); _mapSz=0;}
-		map_t(int sz) : _mapSz(sz){ _map.resize(sz*sz); for(auto it=_map.begin(); it!=_map.end(); it++){ it->resize(0);} }
+		map_t(int sz) : _mapSz(sz)
+		{
+			_map.resize(sz*sz);
+			for(auto it=_map.begin(); it!=_map.end(); it++)
+			{
+				it->resize(0);
+			}
+		}
 		inline const int _compute_coord(positions_t pos) const { return pos[0]+pos[1]*_mapSz;}
 		void SetCharacter(positions_t pos, std::string uid){ _map[_compute_coord(pos)].push_back(uid); }
 		void RemoveCharacter(positions_t pos, std::string uid){ _map[_compute_coord(pos)].erase(std::remove(_map[_compute_coord(pos)].begin(),_map[_compute_coord(pos)].end(), uid), _map[_compute_coord(pos)].end());; }
@@ -98,8 +105,6 @@ private:
 }
 // constuctor
 forest::World::World(int N) : m_mapSz(N){
-	//this->m_population.trees.resize(0);
-	//this->m_population.trees;// = {};
 	this->m_map = map_t(N);
 }
 // Run the World
@@ -116,12 +121,17 @@ void forest::World::AddCharacter(character_client::CharacterE c_type, const char
 	// create a specific delete function
 	if ( c_type == character_client::CharacterE::tree )
 	{
+		// convert the data
 		tree_t* t_data= (tree_t*)(data); //todo: check
-		//std::unique_ptr<Tree, decltype(delCharacter)> new_t(nullptr_t, delCharacter);
-		Tree::TreeT new_t(new Tree(*t_data), forest::Tree::delCharacter);
+		// smart pointer.
+		Tree::TreeT new_t(new Tree(*t_data), forest::Tree::TreeDel);
+		// connect the new object with the global time.
 		this->m_global_time.connect(boost::bind(&Tree::TimePassed, new_t.get()));
+		// let the new object create other objects.
 		new_t->add_sig.connect(boost::bind(&World::AddCharacter, this, _1, _2));
+		// record the character on the map.
 		this->m_map.SetCharacter(t_data->positions, new_t->GetID());
+		// insert the new element to the global population
 		this->m_population.trees.insert(std::make_pair(new_t->GetID(),std::move(new_t)));
 	}
 	else if (c_type == character_client::CharacterE::man)

@@ -9,11 +9,20 @@
 #include <iostream>
 #include <unordered_map>
 
+/** TODO: Move **/
 namespace character_client{
 enum CharacterE{
 	tree, man
 };
 }
+
+/**
+ * A Character is a generic element of the simulation. It is defined by:
+ * 	- having an id
+ *  - having a physical position on the map
+ *  - interact with world with creation (`add_sig`) or suppression (`del_sig` @TODO) of other Charcter
+ *  - can be informed that the time passed time is clicking with `TimePassed` function
+ */
 
 namespace forest{
 /*
@@ -21,15 +30,15 @@ namespace forest{
  */
 // a character has a position on the map
 using positions_t = std::vector<int>;
-using uid_t = boost::uuids::uuid;
-// a character is defined by an id and a position
+// a Character is defined by an id and a position.
 struct character_t{
 	positions_t positions;
 	std::string uid;
 };
+// print the information relative to a character.
 std::ostream& operator<<(std::ostream& os, const character_t c)
 {
-	os << "AbstractCharacter @{" +
+	os << "Character @{" +
 				std::to_string(c.positions[0]) + "," + 
 				std::to_string(c.positions[1]) +
 			"}";
@@ -43,13 +52,7 @@ template<class CharacterT>
 class Character{
 public:
 
-	// implement it owns destructor
-	static void delCharacter (Character<CharacterT>* c){
-		std::string uid = (c)->GetID();
-		std::cout<< "Deleting Character" << uid << std::endl;
-		delete c;
-	};
-	// output signal to send information to world
+	// output signal to send information to world regards a creation of an other character.
 	boost::signals2::signal<void(character_client::CharacterE, CharacterT*)> add_sig;
 
 	// default constructor
@@ -58,11 +61,6 @@ public:
 		this->m_data = CharacterT (data);
 		this->m_data.uid = this->m_uid;
 	}
-	// for comparison == with uid
-	/*Character(const std::string uid){
-		this->m_uid = uid;
-		this->m_data.uid = uid;
-	}*/
 	// copy constructor
 	// Note: the UID is never copied, a copy constructor creates a new character
 	// with same data but with a different ID, so `==' returns false.
@@ -70,20 +68,12 @@ public:
 	{
 		this->m_data = CharacterT(c.GetInfo());
 	}
-	// destructor
-	~Character(){
-	}
-
 
 	//get the id of the character
 	// returns lvalue
 	const std::string& GetID() const &{
 		return this->m_uid;
 	}
-	// returns rvalue
-	//const std::string GetID() const &&{
-	//	return std::move(this->m_uid);
-	//}
 	// get the information relative to the character
 	virtual const CharacterT& GetInfo() const & { return m_data; } //lvalue
 	virtual const CharacterT GetInfo() const && { return m_data; } // rvalue
@@ -92,16 +82,11 @@ public:
 	bool operator==(const Character &charact){
 		return std::strcmp(this->GetID()==charact.GetID()) == 0;
 	}
-	/*
-	friend bool operator==(const Character& c, const std::string &uid){
-		return c->GetID() == uid;
-	}
-	*/
 
+	// PURE VIRTUAL FUNCTIONS
 	// each character has his own way to implement how the time goes.
 	virtual void TimePassed() = 0;
-	// each character has his own way to implement his own print
-	virtual std::ostream& operator<<(std::ostream& os) = 0;
+	// print
 	virtual std::string Print() & = 0;
 
 
@@ -131,16 +116,15 @@ using TreeT = std::unique_ptr<Tree, void(*) (Tree*)>;
 using trees_vector_t = std::unordered_map<std::string, TreeT>;
 	Tree(const tree_t& data) ;
 	Tree(const Tree& t) ;
-	//Tree(const std::string uid) : Character(uid){}
-	// it implements it owns depstructor
-	static void delCharacter (Tree* t);
+	// the smart pointer comes with his own delete 
+	static void TreeDel (Tree* t);
 	~Tree();
+	
 
 	// Virutal functions
 	// time passed
 	void TimePassed();
 	// print the tree information
-	virtual std::ostream& operator<<(std::ostream& os);
 	virtual std::string Print() &;
 
 private:
@@ -180,14 +164,6 @@ void forest::Tree::TimePassed()
 	//this->add_sig(character_client::CharacterE::tree, &new_tree);
 }
 // printing function
-std::ostream& forest::Tree::operator<<(std::ostream& os){
-	os <<
-		"{[" << 
-			this->m_data.positions[0] << "," << this->m_data.positions[1] << "], " <<
-			"age: " << this->m_data.age << 
-		"}";
-	return os;
-}
 std::string forest::Tree::Print() &
 {
 	return 	"{[" +
@@ -195,8 +171,8 @@ std::string forest::Tree::Print() &
 			"age: " + std::to_string(this->m_data.age) +
 		"}";
 }
-void forest::Tree::delCharacter (Tree* t) {
-	std::cout<< "It was a lovely tree." << std::endl;
+void forest::Tree::TreeDel (Tree* t) {
+	std::cout<< "... Goodbye, you were a lovely tree." << std::endl;
 	delete t;
 };
 #endif
