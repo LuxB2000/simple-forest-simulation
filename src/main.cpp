@@ -11,10 +11,12 @@ int main(){
 	a_tree.age = 0;
 	world->AddCharacter(CharacterE::tree, &a_tree);
 
-	auto pop = world->StartWorld(2); // run the simulation of the world with a 
-	std::cout << "At the end we have " << pop.trees.size() << " trees.";
-	auto tree = pop.trees[0];
-	std::cout << " The first tree is " << tree << std::endl;
+	auto pop = world->StartWorld(5); // run the simulation of the world with a 
+	std::cout << "At the end we have " << pop.trees.size() << " trees." << std::endl;
+	for(auto tree: pop.trees )
+	{
+		std::cout << tree << std::endl;
+	}
 
 	std::cout<< " That's all folks" << std::endl;
 	return EXIT_SUCCESS;

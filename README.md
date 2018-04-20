@@ -1,7 +1,7 @@
 ## Introduction
 A simple piece of code to simulate forest.
 The initialization requires a tree.
-At each epoch, all the trees plants a seed in a random place surounding them.
+At each epoch, each tree plant chooses a random place surounding it, if that place does not already contains three trees, then plant a seed.
 Next version will include: lumberjack and parameters to define different type of trees.
 
 Original proposal: https://www.reddit.com/r/dailyprogrammer/comments/27h53e/662014_challenge_165_hard_simulated_ecology_the/

@@ -27,6 +27,8 @@ void forest::World::AddCharacter(CharacterE c_type, const character_t* data ){
 		new_t->add_sig.connect(boost::bind(&World::AddCharacter, this, _1, _2));
 		// let the new object ask for information about the map
 		new_t->ask_neigh_sig.connect(boost::bind(&World::GetNeighborhood, this, _1));
+		// let the new object ask for information population on particular position
+		new_t->ask_info_pop_sig.connect(boost::bind(&World::GetLocalPopulationInfo, this, _1));
 		// record the character on the map.
 		this->m_map.SetCharacter(t_data->positions, new_t->GetID());
 		// insert the new element to the global population
@@ -74,7 +76,7 @@ forest::population_info_t forest::World::GetLocalPopulationInfo(positions_t pos)
 	auto ids = this->m_map.GetCharacters(pos);
 	for(auto id : ids){
 		auto it = this->m_population.trees.find(id);
-		std::cout << "Id: " << id << std::endl;
+		//std::cout << "Id: " << id << std::endl;
 		if(it!=m_population.trees.end())
 		{
 			local_pop.trees.push_back(it->second->GetInfo());

@@ -44,8 +44,11 @@ public:
 
 	// output signal to send information to world regards a creation of an other character.
 	boost::signals2::signal<void(CharacterE, CharacterT*)> add_sig;
-	// output signal to ask information about the surrounding world
+	// output signal to ask list of neighborhood
 	boost::signals2::signal<list_positions_t(positions_t)> ask_neigh_sig;
+	// output signal to ask population_info_t on a position
+	//boost::signals2::signal<info_population_t(positions_t)> ask_info_pop_sig;
+	boost::signals2::signal<population_info_t(positions_t)> ask_info_pop_sig;
 
 	// default constructor
 	Character(const CharacterT& data): m_uid(boost::lexical_cast<std::string>(boost::uuids::random_generator()()))

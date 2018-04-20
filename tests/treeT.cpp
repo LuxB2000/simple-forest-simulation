@@ -74,9 +74,11 @@ suite<> first("Tree suite", [](auto &_) {
 		std::unique_ptr<Tree> tree (new Tree(ddata));
     class CatchAnswer{
     public:
-      character_t mdata;
-      void gotMessage(CharacterE c, const character_t *data){
-        mdata = *data;
+      tree_t mdata;
+      void gotMessage(CharacterE c, tree_t *data){
+        this->mdata = *data;//= tree_t();
+        //this->mdata.positions={};
+        //this->mdata.positions = data->positions;
       }
     };
     CatchAnswer catcher;
