@@ -22,18 +22,24 @@ add_subdirectory(${TESTS_SRC_PATH})
 link_directories(${TEST_SRC_PATH})
 
 # delcare the different tests
-set (TESTS "worldT;treeT")
+set (TESTS "worldT;treeT;mapT")
 foreach(test ${TESTS})
 	add_custom_command(
 		OUTPUT ${test}
 		COMMAND clang++ -std=c++14 -o ${TESTS_BUILD_PATH}/${test} ${TESTS_SRC_PATH}/${test}.cpp ${WORLD_SRC_PATH}/world.cpp ${TREE_SRC_PATH}/tree.cpp -lmettle -g
 	)
+	add_custom_target(
+		${test}
+		COMMAND mettle ./${test}
+		DEPENDS ${test}
+		WORKING_DIRECTORY ./tests
+	)
 endforeach(test ${TESTS})
 # create a target to compile and run the unit tests
 add_custom_target(
 	testing
-	COMMAND mettle ./treeT ./worldT # run unit tests
-	DEPENDS worldT treeT # ask for compilingn and linking
+	COMMAND mettle ./treeT ./mapT ./worldT # run unit tests
+	DEPENDS worldT treeT mapT # ask for compilingn and linking
 	WORKING_DIRECTORY ./tests/ # in the build
 )
 

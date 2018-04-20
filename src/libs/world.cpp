@@ -1,7 +1,7 @@
 #include "world.h"
 // constuctor
 forest::World::World(int N) : m_mapSz(N){
-	this->m_map = map_t(N);
+	this->m_map = map_forest::map_t(N);
 }
 // Run the World
 forest::World::population_info_t forest::World::StartWorld(int max_epoch) const{

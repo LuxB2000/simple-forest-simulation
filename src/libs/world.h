@@ -4,7 +4,7 @@
 #include <boost/signals2.hpp>
 #include <boost/bind.hpp>
 #include "tree.h"
-
+#include "map.h"
 
 namespace forest{
 
@@ -79,27 +79,9 @@ private:
 	using time_signal_t = boost::signals2::signal<void()>;
 	time_signal_t m_global_time;
 
-	// the map stocking which characters below to which coordinates
-	using list_charact_t = std::vector<std::string>;
-	struct map_t{
-		std::vector<list_charact_t> _map;
-		int _mapSz;
-		map_t(){_map.resize(0); _mapSz=0;}
-		map_t(int sz) : _mapSz(sz)
-		{
-			_map.resize(sz*sz);
-			for(auto it=_map.begin(); it!=_map.end(); it++)
-			{
-				it->resize(0);
-			}
-		}
-		inline const int _compute_coord(positions_t pos) const { return pos[0]+pos[1]*_mapSz;}
-		void SetCharacter(positions_t pos, std::string uid){ _map[_compute_coord(pos)].push_back(uid); }
-		void RemoveCharacter(positions_t pos, std::string uid){ _map[_compute_coord(pos)].erase(std::remove(_map[_compute_coord(pos)].begin(),_map[_compute_coord(pos)].end(), uid), _map[_compute_coord(pos)].end());; }
-		const list_charact_t GetCharacters(positions_t pos) const { return _map[_compute_coord(pos)]; }
-		const positions_t GetSizes() const {return {_mapSz,_mapSz}; }
-	};
-	map_t m_map;
+	
+	// the map
+	map_forest::map_t m_map;
 
 };
 

@@ -9,6 +9,7 @@
 #include <iostream>
 #include <unordered_map>
 
+#include "positions.h"
 /**
  * A Character is a generic element of the simulation. It is defined by:
  * 	- having an id
@@ -27,8 +28,6 @@ enum CharacterE{
 /*
  * information relative to a character
  */
-// a character has a position on the map
-using positions_t = std::vector<int>;
 // a Character is defined by an id and a position.
 struct character_t{
 	positions_t positions;
