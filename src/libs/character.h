@@ -8,7 +8,6 @@
 #include <boost/bind.hpp>
 #include <iostream>
 #include <unordered_map>
-#include "myforest.h"
 
 /**
  * A Character is a generic element of the simulation. It is defined by:
@@ -19,6 +18,12 @@
  */
 
 namespace forest{
+/*
+ * Character types usesd in the AddCharacter with the world.
+ */
+enum CharacterE{
+	tree, man
+};
 /*
  * information relative to a character
  */

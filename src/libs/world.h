@@ -3,11 +3,11 @@
 
 #include <boost/signals2.hpp>
 #include <boost/bind.hpp>
-#include "myforest.h"
 #include "tree.h"
 
 
 namespace forest{
+
 /*
  * The World 
  * 	- records the events,

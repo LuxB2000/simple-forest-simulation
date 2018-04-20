@@ -1,6 +1,5 @@
 #include "libs/world.h"
 #include "libs/tree.h"
-#include "libs/myforest.h"
 
 using namespace forest;
 
