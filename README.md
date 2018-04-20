@@ -1,6 +1,8 @@
 ## Introduction
-A simple piece of code to simulate forest. So far, the tree are created, could be deleted and get aged. They don't seed yet in the sumlation (However they do in the unit test).
-Next version will include: lumberjack and seeding from trees.
+A simple piece of code to simulate forest.
+The initialization requires a tree.
+At each epoch, all the trees plants a seed in a random place surounding them.
+Next version will include: lumberjack and parameters to define different type of trees.
 
 Original proposal: https://www.reddit.com/r/dailyprogrammer/comments/27h53e/662014_challenge_165_hard_simulated_ecology_the/
 ## Dependencies:

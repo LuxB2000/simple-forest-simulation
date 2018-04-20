@@ -1,5 +1,6 @@
 #include <mettle.hpp>
 #include "../src/libs/tree.h"
+#include "../src/libs/map.h"
 
 using namespace mettle;
 using namespace forest;
@@ -61,11 +62,47 @@ suite<> first("Tree suite", [](auto &_) {
     std::string id = tree2->GetInfo().uid;
    // expect(tree2 ==id, equal_to(true));
   });
+  _.test("Seeding", [](){
+    tree_t ddata; // default data
+    ddata.positions = {0,0};
+    ddata.age = 0;
+
+    tree_t newT;
+    newT.positions = {1,1};
+    newT.age = 0;
+
+		std::unique_ptr<Tree> tree (new Tree(ddata));
+    class CatchAnswer{
+    public:
+      character_t mdata;
+      void gotMessage(CharacterE c, const character_t *data){
+        mdata = *data;
+      }
+    };
+    CatchAnswer catcher;
+    tree->add_sig.connect(boost::bind(&CatchAnswer::gotMessage, catcher, _1, _2));
+    tree->Seeding(newT.positions);
+    expect(catcher.mdata.positions == newT.positions, equal_to(true));
+  });
   _.test("Time Passed", []() {
     tree_t ddata; // default data
     ddata.positions = {0,0};
     ddata.age = 0;
 		std::unique_ptr<Tree> tree (new Tree(ddata));
+    map_forest::map_t map(10);
+    class MsgCatcher{
+      public:
+      void ICanCatch(CharacterE c_type, character_t* p){}
+      list_positions_t ICanToo(positions_t pos){
+        list_positions_t opos;
+        opos.resize(0);
+        return opos;
+      }
+    };
+    MsgCatcher catcher;
+		tree->add_sig.connect(boost::bind(&MsgCatcher::ICanCatch, catcher, _1, _2));
+		tree->ask_neigh_sig.connect(boost::bind(&MsgCatcher::ICanToo, catcher, _1));
+
     tree->TimePassed();
     expect(tree->GetInfo().age, equal_to(ddata.age+1));
   });

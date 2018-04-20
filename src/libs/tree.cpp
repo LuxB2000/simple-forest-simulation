@@ -38,10 +38,21 @@ forest::Tree::~Tree()
 void forest::Tree::TimePassed()
 {
 	this->m_data.age += 1 ;
-	// todo: run a seed with a known probablity
-	// todo: find correct place
-	//tree_t new_tree; new_tree.positions = {1,2}; new_tree.age = 0;
-	//this->add_sig(character_client::CharacterE::tree, &new_tree);
+	// get the local neighborhood
+	auto neigh = this->ask_neigh_sig(this->m_data.positions);
+	std::cout << ">> UID: " << this->GetID() << std::endl;
+	std::cout << "I receive " << std::to_string(neigh->size()) << " potential places for my seed."<<std::endl;
+	if(neigh->size() > 0){
+		// randomly select a position
+		std::uniform_int_distribution<> dis(1, neigh->size()-1);
+		auto randn = dis(this->gen);
+		std::cout<<"we choose the position " << randn <<std::endl;
+		auto rpos = neigh->at(randn);
+		std::cout << "that is the position " << rpos._pos[0] << ", " << rpos._pos[1] << std::endl;
+		// plant the seed there
+		this->Seeding(rpos);
+	}
+	std::cout << "<<" << std::endl;
 }
 // printing function
 std::string forest::Tree::Print() &
@@ -55,3 +66,11 @@ void forest::Tree::TreeDel (Tree* t) {
 	std::cout<< "... Goodbye, you were a lovely tree." << std::endl;
 	delete t;
 };
+
+void forest::Tree::Seeding(forest::positions_t pos)
+{
+	tree_t new_t;
+	new_t.age = 0;
+	new_t.positions = pos;
+	this->add_sig(CharacterE::tree, &new_t);
+}

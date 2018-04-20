@@ -6,7 +6,6 @@
 namespace map_forest{
 // the map stocking which characters below to which coordinates
 using list_charact_t = std::vector<std::string>;
-using list_positions_t = std::vector<forest::positions_t>;
 
 /*
  * The map of the world.
@@ -16,7 +15,7 @@ using list_positions_t = std::vector<forest::positions_t>;
 struct map_t{
 	std::vector<list_charact_t> _map;
 	int _mapSz;
-	list_positions_t _neigh1;
+	forest::list_positions_t _neigh1;
 	map_t(int sz=0) : 
 		_mapSz(sz),
 		_neigh1( // constant, used to compute a local neighborhood
@@ -55,9 +54,9 @@ struct map_t{
 		return _map[_compute_coord(pos)];
 	}
 	// get a neighborhood of a position
-	list_positions_t GetNeighborhood(forest::positions_t pos)
+	forest::list_positions_t GetNeighborhood(forest::positions_t pos)
 	{
-		list_positions_t neigh;
+		forest::list_positions_t neigh;
 		neigh.resize(0);
 		for(auto n: _neigh1)
 		{

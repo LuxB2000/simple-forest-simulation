@@ -51,7 +51,7 @@ suite<> first("World suite", [](auto &_) {
   });
   _.test("World Running", [](){
     std::unique_ptr<World> world (new World());
-    World::population_info_t pop = world->StartWorld();
+    population_info_t pop = world->StartWorld();
     // expect the program ends
     expect(pop.trees.size(),greater_equal(0));
   });
@@ -63,8 +63,8 @@ suite<> first("World suite", [](auto &_) {
     a_tree.age = 0;
     world->AddCharacter(CharacterE::tree, &a_tree);
 
-    World::population_info_t pop = world->StartWorld(max_epoch); // run the simulation of the world with a 
-    World::population_info_t pop_info = world->GetPopulationInfo();
+    population_info_t pop = world->StartWorld(max_epoch); // run the simulation of the world with a 
+    population_info_t pop_info = world->GetPopulationInfo();
     // we expect at least one tree to be `max_epoch' years old
     auto found = false;
     for(auto t_info : pop_info.trees){
@@ -84,9 +84,22 @@ suite<> first("World suite", [](auto &_) {
     auto N = world->GetNumberOfCharacters();
     auto Nt = world->GetNumberOfTrees();
     
-    World::population_info_t pop_info = world->GetPopulationInfo();
+    population_info_t pop_info = world->GetPopulationInfo();
     world->RemoveCharacter(pop_info.trees[0].uid);
     expect(world->GetNumberOfCharacters(), equal_to(N-1));
     expect(world->GetNumberOfTrees(), equal_to(Nt-1));
   });
+  _.test("World get local information of a neighborhood", [](){
+    tree_t ddata;
+    ddata.positions = {1,1};
+    ddata.age = 0;
+    positions_t tgt = {0,0};
+		std::unique_ptr<World> world (new World());
+    world->AddCharacter(CharacterE::tree, &ddata);
+    expect(world->GetNeighborhoodPopulationInfo(tgt).trees.size(), equal_to(1));
+    ddata.positions = {1,0};
+    world->AddCharacter(CharacterE::tree, &ddata);
+    expect(world->GetNeighborhoodPopulationInfo(tgt).trees.size(), equal_to(2));
+  });
+
 });

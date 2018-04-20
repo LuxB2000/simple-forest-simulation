@@ -1,15 +1,18 @@
 #ifndef CHARACTER__H
 #define CHARACTER__H
 
+#include <iostream>
+#include <unordered_map>
+#include <random>
+
 #include <boost/uuid/random_generator.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/signals2.hpp>
 #include <boost/bind.hpp>
-#include <iostream>
-#include <unordered_map>
 
 #include "positions.h"
+#include "population.h"
 /**
  * A Character is a generic element of the simulation. It is defined by:
  * 	- having an id
@@ -20,19 +23,8 @@
 
 namespace forest{
 /*
- * Character types usesd in the AddCharacter with the world.
- */
-enum CharacterE{
-	tree, man
-};
-/*
  * information relative to a character
  */
-// a Character is defined by an id and a position.
-struct character_t{
-	positions_t positions;
-	std::string uid;
-};
 // print the information relative to a character.
 /*std::ostream& operator<<(std::ostream& os, const character_t c)
 {
@@ -52,11 +44,15 @@ public:
 
 	// output signal to send information to world regards a creation of an other character.
 	boost::signals2::signal<void(CharacterE, CharacterT*)> add_sig;
+	// output signal to ask information about the surrounding world
+	boost::signals2::signal<list_positions_t(positions_t)> ask_neigh_sig;
 
 	// default constructor
 	Character(const CharacterT& data): m_uid(boost::lexical_cast<std::string>(boost::uuids::random_generator()()))
 	{
 		this->m_data = CharacterT (data);
+		std::random_device rd;  //Will be used to obtain a seed for the random number engine
+		this->gen = std::mt19937(rd());
 		this->m_data.uid = this->m_uid;
 	}
 	// copy constructor
@@ -91,6 +87,7 @@ public:
 protected:
 	std::string m_uid; // the unique id of the object
 	CharacterT m_data; // the data defining a particular character
+	std::mt19937 gen;//(rd()); //Standard mersenne_twister_engine seeded with rd()
 };
 
 }

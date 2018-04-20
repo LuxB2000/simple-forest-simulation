@@ -60,6 +60,9 @@ const inline std::ostream& operator<<(std::ostream& os, positions_t p)
 	return os;
 }
 
+// a list of position
+using list_positions_t = std::vector<forest::positions_t>;
 };
+
 
 #endif

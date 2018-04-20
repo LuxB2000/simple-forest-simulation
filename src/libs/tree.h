@@ -7,11 +7,6 @@ namespace forest{
 /*
  * The information relative to the Tree
  */
-struct tree_t : character_t{
-	unsigned long age;
-};
-std::ostream& operator<<(std::ostream& os, const forest::tree_t t);
-
 class Tree: public Character<tree_t>{
 public:
 using TreeT = std::unique_ptr<Tree, void(*) (Tree*)>;
@@ -28,6 +23,11 @@ using trees_vector_t = std::unordered_map<std::string, TreeT>;
 	void TimePassed();
 	// print the tree information
 	virtual std::string Print() &;
+
+	/*
+	 * Create a Tree at the position pos and inform the world
+	 */
+	void Seeding(positions_t pos);
 
 private:
 };

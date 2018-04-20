@@ -20,9 +20,11 @@ public:
 
 
 // some type
+/*
 struct population_info_t{
 	std::vector<forest::tree_t> trees;
 };
+*/
 	// constructor
 	World(int N=10);
 	
@@ -51,6 +53,18 @@ struct population_info_t{
 	 * Return a local population;
 	 */
 	population_info_t GetLocalPopulationInfo(positions_t) const;
+	/*
+	 * Get all the coordinates of a surronding position.
+	 */
+	list_positions_t GetNeighborhood(positions_t);
+	/*
+	 * Get population info of all the neighborhoods of a specific position.
+	 * param int area: define the area for the neight.
+	 * area = 0 -> got only on the position
+	 * area = 1 -> got only the first-neighborhood
+	 * area = 1.5 -> got the position AND the first-neighborhood // @TODO
+	 */
+	population_info_t GetNeighborhoodPopulationInfo(positions_t, float area=1.0);
 	/*
 	 * Add a Character to the world,
 	 * usually bind by the characters while they create trees by seeding.
