@@ -18,6 +18,28 @@ suite<> first("Tree suite", [](auto &_) {
     expect(p1.is_equal(p3), equal_to(false));
     expect(p1==p3, equal_to(false));
   });
+  _.test("positions_t sum", [](){
+    positions_t p1 = {1,1};
+    positions_t p2 = {2,3};
+    positions_t expected = {3,4}, sum = p1+p2;
+    expect(sum==expected, equal_to(true));
+  });
+  _.test("is any position in positions_t smaller than",[](){
+    positions_t pos = {0,1};
+    positions_t pos1 = {-1,1};
+    positions_t pos2 = {0,-1};
+    expect(pos<0, equal_to(false));
+    expect(pos1<0, equal_to(true));
+    expect(pos2<0, equal_to(true));
+  });
+ _.test("is any position in positions_t bigger than",[](){
+    positions_t pos={1,1};
+    positions_t pos2={0,2};
+    positions_t pos3={2,0};
+    expect(pos>1, equal_to(false));
+    expect(pos2>1, equal_to(true));
+    expect(pos3>1, equal_to(true));
+  });
   _.test("Character creation and initialization", []() {
     tree_t ddata; // ?? Why not possible to pass ddata, size of positions is not 2
     ddata.positions = {0,0};

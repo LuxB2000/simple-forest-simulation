@@ -29,7 +29,7 @@ foreach(test ${TESTS})
 		COMMAND clang++ -std=c++14 -o ${TESTS_BUILD_PATH}/${test} ${TESTS_SRC_PATH}/${test}.cpp ${WORLD_SRC_PATH}/world.cpp ${TREE_SRC_PATH}/tree.cpp -lmettle -g
 	)
 	add_custom_target(
-		${test}
+		test-${test}
 		COMMAND mettle ./${test}
 		DEPENDS ${test}
 		WORKING_DIRECTORY ./tests

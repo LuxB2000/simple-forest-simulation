@@ -15,7 +15,7 @@ To perform all unit tests:
 - `$ make testing`
 
 To perform a single unit tests:
-- `$ make treeT`
+- `$ make test-treeT`
 
 To run a simulation
 - `$ make`

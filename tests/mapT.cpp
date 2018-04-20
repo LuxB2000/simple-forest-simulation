@@ -32,4 +32,16 @@ suite<> first("Map Tree suite", [](auto& _){
 		map.RemoveCharacter(pos, uid);
 		expect(map.GetCharacters(pos).size(), equal_to(0));
 	});
+	_.test("Get Neighborhood", [](){
+		map_t map(10);
+		forest::positions_t pos = {0,0};
+		auto neigh = map.GetNeighborhood(pos);
+		expect(neigh.size(), equal_to(3));
+		pos = {4,4};
+		neigh = map.GetNeighborhood(pos);
+		expect(neigh.size(), equal_to(8));
+		pos = {9,9};
+		neigh = map.GetNeighborhood(pos);
+		expect(neigh.size(), equal_to(3));
+	});
 });
