@@ -85,12 +85,18 @@ forest::population_info_t forest::World::GetLocalPopulationInfo(positions_t pos)
 	// find the information on the map
 	auto ids = this->m_map.GetCharacters(pos);
 	for(auto id : ids){
-		// todo: more general solution to find any character on the ID
+		// @TODO: more general solution to find any character on the ID
 		auto it = this->m_population.trees.find(id);
 		//std::cout << "Id: " << id << std::endl;
 		if(it!=m_population.trees.end())
 		{
 			local_pop.trees.push_back(it->second->GetInfo());
+		}else{
+			// have a look in the lumberjacks
+			auto itl = this->m_population.lumberjacks.find(id);
+			if(itl!=m_population.lumberjacks.end()){
+				local_pop.lumberjacks.push_back(itl->second->GetInfo());
+			}
 		}
 	}
 	return local_pop;

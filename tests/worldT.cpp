@@ -62,12 +62,18 @@ suite<> first("World suite", [](auto &_) {
     // add a second at the same place
     world->AddCharacter(CharacterE::tree, &ddata);
     expect(world->GetLocalPopulationInfo(ddata.positions).trees.size(), equal_to(2));
+    lumberjack_t ldata;
+    ldata.ressources = 0;
+    ldata.positions = {1,1};
+    world->AddCharacter(CharacterE::lumberjack, &ldata);
+    expect(world->GetLocalPopulationInfo(ldata.positions).lumberjacks.size(), equal_to(1));
   });
   _.test("World Running", [](){
     std::unique_ptr<World> world (new World());
     population_info_t pop = world->StartWorld();
     // expect the program ends
     expect(pop.trees.size(),greater_equal(0));
+    expect(pop.lumberjacks.size(),greater_equal(0));
   });
   _.test("World, time is clicking", [](){
     auto max_epoch = 10;
