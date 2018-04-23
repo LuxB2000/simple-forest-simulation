@@ -17,6 +17,7 @@ suite<> first("World suite", [](auto &_) {
     std::unique_ptr<World> world (new World());
     auto pop_info = world->GetPopulationInfo();
     expect(pop_info.trees.size(), equal_to(0));
+    expect(pop_info.lumberjacks.size(), equal_to(0));
   });
   _.test("World tree recording validation", []() {
     tree_t ddata;
@@ -37,6 +38,19 @@ suite<> first("World suite", [](auto &_) {
     // check recording and population information
     auto pop_info = world->GetPopulationInfo();
     expect(pop_info.trees.size(),equal_to(Nt+1));
+  });
+  _.test("Lumberjack creation", [](){
+    std::unique_ptr<World> world (new World());
+    auto N = world->GetNumberOfCharacters();
+    auto Nl = world->GetNumberOfLumberjacks();
+    lumberjack_t data;
+    data.positions = {0,0};
+    data.ressources = 0;
+    world->AddCharacter(CharacterE::lumberjack, &data);
+    auto pop_info = world->GetPopulationInfo();
+    expect(pop_info.lumberjacks.size(), equal_to(Nl+1));
+    expect(pop_info.lumberjacks.size(), equal_to(N+1));
+    
   });
   _.test("World get local population information", [](){
     tree_t ddata;

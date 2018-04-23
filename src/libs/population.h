@@ -9,7 +9,7 @@ namespace forest{
  * Character types usesd in the AddCharacter with the world.
  */
 enum CharacterE{
-	tree, man
+	tree, lumberjack
 };
 
 // a Character is defined by an id and a position.
@@ -27,9 +27,18 @@ struct tree_t : character_t{
 // note, implemented in tree.cpp
 std::ostream& operator<<(std::ostream& os, const forest::tree_t t);
 
+struct lumberjack_t : character_t{
+	int ressources;
+};
+// note, implemented in lumberjack.cpp
+//std::ostream& operator<<(std::ostream& os, const forest::tree_t t);
 
+/*
+ * Contains a picture of the world
+ */
 struct population_info_t{
 	std::vector<tree_t> trees;
+	std::vector<lumberjack_t> lumberjacks;
 };
 
 

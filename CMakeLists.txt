@@ -39,7 +39,7 @@ endforeach(test ${TESTS})
 # create a target to compile and run the unit tests
 add_custom_target(
 	testing
-	COMMAND mettle ./treeT ./mapT ./worldT ./lumberjackT # run unit tests
+	COMMAND mettle ./treeT ./lumberjackT ./mapT ./worldT  # run unit tests
 	DEPENDS worldT treeT mapT lumberjackT # ask for compilingn and linking
 	WORKING_DIRECTORY ./tests/ # in the build
 )
