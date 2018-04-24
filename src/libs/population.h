@@ -25,13 +25,13 @@ struct tree_t : character_t{
 	unsigned long age;
 };
 // note, implemented in tree.cpp
-std::ostream& operator<<(std::ostream& os, const forest::tree_t t);
+std::ostream& operator<<(std::ostream& os, const tree_t t);
 
 struct lumberjack_t : character_t{
 	int ressources;
 };
 // note, implemented in lumberjack.cpp
-//std::ostream& operator<<(std::ostream& os, const forest::tree_t t);
+std::ostream& operator<<(std::ostream& os, const lumberjack_t l);
 
 /*
  * Contains a picture of the world

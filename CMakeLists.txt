@@ -13,6 +13,7 @@ set (TREE_SRC_PATH ${CMAKE_SOURCE_DIR}/src/libs) #todo: use correct variable
 set (LUMBERJACK_SRC_PATH ${CMAKE_SOURCE_DIR}/src/libs/lumberjack)
 add_subdirectory(${CODE_SRC_PATH})
 include_directories(${WOLRD_SRC_PATH})
+include_directories(${LUMBERJACK_SRC_PATH})
 
 # Unit Tests
 # ==========
@@ -48,4 +49,4 @@ add_custom_target(
 SET (DEBUG_FLAG "-g")
 SET (CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${DEBUG_FLAG}")
 add_executable (SimuForest ${CODE_SRC_PATH}/main.cpp )
-target_link_libraries(SimuForest World Tree)
+target_link_libraries(SimuForest World Tree Lumberjack)

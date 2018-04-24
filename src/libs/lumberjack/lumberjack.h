@@ -21,6 +21,12 @@ public:
 		delete l;
 	}
 
+	// signal to inform the world that the lumberjack move
+	boost::signals2::signal<void(positions_t, positions_t, const std::string)> moving_sig;
+
+	// the lumberjack moves from one place to an other but sending information to the world.
+	void Moving(positions_t to);
+
 	void TimePassed();
 	std::string Print() &;
 };
