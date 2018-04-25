@@ -34,9 +34,25 @@ void forest::World::AddCharacter(CharacterE c_type, const character_t* data ){
 		// insert the new element to the global population
 		this->m_population.trees.insert(std::make_pair(new_t->GetID(),std::move(new_t)));
 	}
-	else if (c_type == CharacterE::man)
+	else if (c_type == CharacterE::lumberjack)
 	{
-		std::cerr  << "NOT YET IMPLEMENTED" << std::endl;
+		lumberjack_t* ldata = (lumberjack_t*) data;
+		LumberjackT new_l(new Lumberjack(*ldata), Lumberjack::LumberjackDel);
+		// connect the signals
+		// connect the new object with the global time.
+		this->m_global_time.connect(boost::bind(&Lumberjack::TimePassed, new_l.get()));
+		// let the lumberjack move along the map
+		new_l->moving_sig.connect(boost::bind(&World::MoveCharacter, this, _1, _2, _3));
+		// let the lumberjack remove trees.
+		new_l->cutting_sig.connect(boost::bind(&World::RemoveCharacter, this, _1));
+		// let the new object ask for information about the map
+		new_l->ask_neigh_sig.connect(boost::bind(&World::GetNeighborhood, this, _1));
+		// let the new object ask for information population on particular position
+		new_l->ask_info_pop_sig.connect(boost::bind(&World::GetLocalPopulationInfo, this, _1));
+		// record the character on the map.
+		this->m_map.SetCharacter(ldata->positions, new_l->GetID());
+		// insert the new element to the global population
+		this->m_population.lumberjacks.insert(std::make_pair(new_l->GetID(),std::move(new_l)));
 	}
 	else
 	{
@@ -59,12 +75,17 @@ void forest::World::RemoveCharacter(std::string uid)
 }
 forest::population_info_t forest::World::GetPopulationInfo() const{
 	population_info_t pop_info;
+	// TODO: generate a iterator for the map and ask for each position the localpopulationinfo
 	pop_info.trees.resize(0); // todo: create local function to initiate the population_info_t
+	pop_info.lumberjacks.resize(0);
 	for(auto tree_it= this->m_population.trees.begin(); tree_it!=this->m_population.trees.end(); tree_it++)
 	{
 		pop_info.trees.push_back(tree_it->second->GetInfo());
 	}
-
+	for(auto luja_it= this->m_population.lumberjacks.begin(); luja_it!=this->m_population.lumberjacks.end(); luja_it++)
+	{
+		pop_info.lumberjacks.push_back(luja_it->second->GetInfo());
+	}
 	return pop_info;
 }
 
@@ -75,11 +96,18 @@ forest::population_info_t forest::World::GetLocalPopulationInfo(positions_t pos)
 	// find the information on the map
 	auto ids = this->m_map.GetCharacters(pos);
 	for(auto id : ids){
+		// @TODO: more general solution to find any character on the ID
 		auto it = this->m_population.trees.find(id);
 		//std::cout << "Id: " << id << std::endl;
 		if(it!=m_population.trees.end())
 		{
 			local_pop.trees.push_back(it->second->GetInfo());
+		}else{
+			// have a look in the lumberjacks
+			auto itl = this->m_population.lumberjacks.find(id);
+			if(itl!=m_population.lumberjacks.end()){
+				local_pop.lumberjacks.push_back(itl->second->GetInfo());
+			}
 		}
 	}
 	return local_pop;
@@ -110,4 +138,19 @@ forest::population_info_t forest::World::GetNeighborhoodPopulationInfo(positions
 
 forest::list_positions_t forest::World::GetNeighborhood(positions_t pos){
 	return this->m_map.GetNeighborhood(pos);
+}
+
+void
+forest::World::MoveCharacter(std::string uid, forest::positions_t from, forest::positions_t to )
+{
+	// WARNING: only Lumberjack can move for now
+	auto it = this->m_population.lumberjacks.find(uid);
+	if( it!= this->m_population.lumberjacks.end())
+	{
+		// find the object and change its information
+		it->second->SetPositions(to);
+		// move the object on the map
+		this->m_map.SetCharacter(to, it->second->GetID());
+		this->m_map.RemoveCharacter(from, it->second->GetID());
+	}
 }

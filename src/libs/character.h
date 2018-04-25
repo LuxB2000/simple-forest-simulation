@@ -65,6 +65,8 @@ public:
 	{
 		this->m_data = CharacterT(c.GetInfo());
 	}
+	// change the positions of the character
+	void SetPositions(positions_t new_pos) { this->m_data.positions=new_pos; }
 
 	//get the id of the character
 	// returns lvalue
@@ -75,10 +77,6 @@ public:
 	virtual const CharacterT& GetInfo() const & { return m_data; } //lvalue
 	virtual const CharacterT GetInfo() const && { return m_data; } // rvalue
 
-	// compare two characters based on the ID
-	bool operator==(const Character &charact){
-		return std::strcmp(this->GetID()==charact.GetID()) == 0;
-	}
 
 	// PURE VIRTUAL FUNCTIONS
 	// each character has his own way to implement how the time goes.
@@ -92,6 +90,17 @@ protected:
 	CharacterT m_data; // the data defining a particular character
 	std::mt19937 gen;//(rd()); //Standard mersenne_twister_engine seeded with rd()
 };
+
+	// compare Tree with string.
+	inline bool operator==(const std::unique_ptr<forest::Character<character_t>>& lhs, const std::string& rhs)
+	{
+		return lhs->GetID() == rhs;
+	}
+	inline bool operator==(const std::string& lhs, const std::unique_ptr<forest::Character<character_t>>& rhs)
+	{
+		return lhs == rhs->GetID();
+	}
+
 
 }
 

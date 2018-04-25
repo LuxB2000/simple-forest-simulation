@@ -5,6 +5,7 @@
 #include <boost/bind.hpp>
 #include "tree.h"
 #include "map.h"
+#include "lumberjack/lumberjack.h"
 
 namespace forest{
 
@@ -36,8 +37,9 @@ struct population_info_t{
 
 	// getters
 	int GetMapSize() { return this->m_mapSz; }
-	long GetNumberOfCharacters() { return this->GetNumberOfTrees(); }
+	long GetNumberOfCharacters() { return this->GetNumberOfTrees() + this->GetNumberOfLumberjacks(); }
 	long GetNumberOfTrees() { return this->m_population.trees.size(); }
+	long GetNumberOfLumberjacks() { return this->m_population.lumberjacks.size();}
 	/*
 	 * Ask the global population
 	 * Return the global population as a structur of pointer to the different objects.
@@ -79,12 +81,21 @@ struct population_info_t{
 	 * Remove a character based on the uid
 	 */
 	void RemoveCharacter(std::string uid);
+	/*
+	 * Move a Character from a position to an other,
+	 * update the map and population.
+	 * WARNING: only Lumberjack can move for now
+	 */
+	void MoveCharacter(const std::string uid, positions_t from, positions_t to );
 
 private:
 	int m_mapSz;
 
+	using LumberjackT = std::unique_ptr<Lumberjack, void(*) (Lumberjack*)>;
+	using lumberjack_vector_t = std::unordered_map<std::string, LumberjackT>;
 	struct population_t{
 		Tree::trees_vector_t trees;
+		lumberjack_vector_t lumberjacks;
 	};
 	// population on the world
 	population_t m_population;

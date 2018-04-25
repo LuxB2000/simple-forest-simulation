@@ -17,6 +17,7 @@ suite<> first("World suite", [](auto &_) {
     std::unique_ptr<World> world (new World());
     auto pop_info = world->GetPopulationInfo();
     expect(pop_info.trees.size(), equal_to(0));
+    expect(pop_info.lumberjacks.size(), equal_to(0));
   });
   _.test("World tree recording validation", []() {
     tree_t ddata;
@@ -38,6 +39,19 @@ suite<> first("World suite", [](auto &_) {
     auto pop_info = world->GetPopulationInfo();
     expect(pop_info.trees.size(),equal_to(Nt+1));
   });
+  _.test("Lumberjack creation", [](){
+    std::unique_ptr<World> world (new World());
+    auto N = world->GetNumberOfCharacters();
+    auto Nl = world->GetNumberOfLumberjacks();
+    lumberjack_t data;
+    data.positions = {0,0};
+    data.ressources = 0;
+    world->AddCharacter(CharacterE::lumberjack, &data);
+    auto pop_info = world->GetPopulationInfo();
+    expect(pop_info.lumberjacks.size(), equal_to(Nl+1));
+    expect(pop_info.lumberjacks.size(), equal_to(N+1));
+    
+  });
   _.test("World get local population information", [](){
     tree_t ddata;
     ddata.positions = {0,0};
@@ -48,12 +62,18 @@ suite<> first("World suite", [](auto &_) {
     // add a second at the same place
     world->AddCharacter(CharacterE::tree, &ddata);
     expect(world->GetLocalPopulationInfo(ddata.positions).trees.size(), equal_to(2));
+    lumberjack_t ldata;
+    ldata.ressources = 0;
+    ldata.positions = {1,1};
+    world->AddCharacter(CharacterE::lumberjack, &ldata);
+    expect(world->GetLocalPopulationInfo(ldata.positions).lumberjacks.size(), equal_to(1));
   });
   _.test("World Running", [](){
     std::unique_ptr<World> world (new World());
     population_info_t pop = world->StartWorld();
     // expect the program ends
     expect(pop.trees.size(),greater_equal(0));
+    expect(pop.lumberjacks.size(),greater_equal(0));
   });
   _.test("World, time is clicking", [](){
     auto max_epoch = 10;
@@ -100,6 +120,20 @@ suite<> first("World suite", [](auto &_) {
     ddata.positions = {1,0};
     world->AddCharacter(CharacterE::tree, &ddata);
     expect(world->GetNeighborhoodPopulationInfo(tgt).trees.size(), equal_to(2));
+  });
+  _.test("Move a Character", [](){
+    lumberjack_t data;
+    data.positions = {0,0};
+    data.ressources = 0;
+		std::unique_ptr<World> world (new World());
+    world->AddCharacter(CharacterE::lumberjack, &data);
+    auto pop_info = world->GetLocalPopulationInfo(data.positions);
+    positions_t new_pos = {1,1};
+    world->MoveCharacter(pop_info.lumberjacks[0].uid, pop_info.lumberjacks[0].positions, new_pos);
+    auto pop_expect_empty =  world->GetLocalPopulationInfo(data.positions);
+    auto pop_expect_not_empty = world->GetLocalPopulationInfo(new_pos);
+    expect(pop_expect_empty.lumberjacks.size(), equal_to(0));
+    expect(pop_expect_not_empty.lumberjacks.size(), equal_to(1));
   });
 
 });

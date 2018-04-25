@@ -10,16 +10,6 @@ std::ostream& forest::operator<<(std::ostream& os, const forest::tree_t t)
 	return os;
 }
 
-// compare Tree with string.
-inline bool operator==(const std::unique_ptr<forest::Tree>& lhs, const std::string& rhs)
-{
-	return lhs->GetID() == rhs;
-}
-inline bool operator==(const std::string& lhs, const std::unique_ptr<forest::Tree>& rhs)
-{
-	return lhs == rhs->GetID();
-}
-
 // constructor
 forest::Tree::Tree(const tree_t& data) : Character<forest::tree_t>(data)
 {

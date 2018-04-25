@@ -62,6 +62,16 @@ suite<> first("Tree suite", [](auto &_) {
     std::string id = tree2->GetInfo().uid;
    // expect(tree2 ==id, equal_to(true));
   });
+  _.test("Change the position of a character", [](){
+    tree_t data;
+    data.positions={0,0};
+    data.age = 0;
+    std::unique_ptr<Tree> tree(new Tree(data));
+    positions_t new_pos = {1,1};
+    tree->SetPositions(new_pos);
+    expect(tree->GetInfo().positions == new_pos, equal_to(true));
+
+  });
   _.test("Seeding", [](){
     tree_t ddata; // default data
     ddata.positions = {0,0};
