@@ -27,7 +27,7 @@ suite<> first("Lumberjack suite", [] (auto &mettle){
 				this->exp_from = from;
 				this->exp_to = to;
 			}
-			void GotMessage(positions_t from, positions_t to, const std::string uid){
+			void GotMessage(const std::string uid, positions_t from, positions_t to){
 				expect(uid==this->exp_uid, equal_to(true));
 				expect(exp_from==from, equal_to(true));
 				expect(exp_to==to, equal_to(true));
@@ -39,7 +39,27 @@ suite<> first("Lumberjack suite", [] (auto &mettle){
 		lumberjack->moving_sig.connect(boost::bind(&CatchAnswer::GotMessage, catcher, _1, _2, _3));
 		lumberjack->Moving(new_pos);
 	});
-	mettle.test("Removing", [](){
+	mettle.test("Cutting", [](){
+		lumberjack_t data;
+		data.positions = {1,1};
+		data.ressources = 0;
+
+		class Catcher{
+			public:
+			std::string exp_uid;
+			Catcher(std::string uid) : exp_uid(uid) {} 
+			void GotMessage(std::string catched_uid)
+			{
+				expect(catched_uid==this->exp_uid, equal_to(true));
+			}
+		};
+
+		std::string tree_id = "someID";
+		std::unique_ptr<Lumberjack> lumberjack(new Lumberjack(data));
+		Catcher catcher(tree_id);
+
+		lumberjack->cutting_sig.connect(boost::bind(&Catcher::GotMessage, catcher, _1));
+		lumberjack->Cutting(tree_id);
 
 	});
 }); //end suite

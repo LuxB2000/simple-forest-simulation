@@ -23,7 +23,12 @@ forest::Lumberjack::Lumberjack(const Lumberjack &l) : Character<forest::lumberja
 void
 forest::Lumberjack::Moving(positions_t to)
 {
-	this->moving_sig(this->GetInfo().positions, to, this->GetID());
+	this->moving_sig(this->GetID(), this->GetInfo().positions, to);
+}
+
+void forest::Lumberjack::Cutting(std::string uid)
+{
+	this->cutting_sig(uid);
 }
 
 void

@@ -22,10 +22,15 @@ public:
 	}
 
 	// signal to inform the world that the lumberjack move
-	boost::signals2::signal<void(positions_t, positions_t, const std::string)> moving_sig;
+	boost::signals2::signal<void(const std::string, positions_t, positions_t)> moving_sig;
+	// signal to inform the world that the lumberjack cut a tree
+	boost::signals2::signal<void(const std::string)> cutting_sig;
+
 
 	// the lumberjack moves from one place to an other but sending information to the world.
 	void Moving(positions_t to);
+
+	void Cutting(std::string uid);
 
 	void TimePassed();
 	std::string Print() &;
