@@ -81,6 +81,12 @@ struct population_info_t{
 	 * Remove a character based on the uid
 	 */
 	void RemoveCharacter(std::string uid);
+	/*
+	 * Move a Character from a position to an other,
+	 * update the map and population.
+	 * WARNING: only Lumberjack can move for now
+	 */
+	void MoveCharacter(std::string uid, positions_t from, positions_t to );
 
 private:
 	int m_mapSz;

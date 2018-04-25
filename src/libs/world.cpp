@@ -38,6 +38,8 @@ void forest::World::AddCharacter(CharacterE c_type, const character_t* data ){
 	{
 		lumberjack_t* ldata = (lumberjack_t*) data;
 		LumberjackT new_l(new Lumberjack(*ldata), Lumberjack::LumberjackDel);
+		// connect the signals
+		// @TODO
 		// record the character on the map.
 		this->m_map.SetCharacter(ldata->positions, new_l->GetID());
 		// insert the new element to the global population
@@ -127,4 +129,19 @@ forest::population_info_t forest::World::GetNeighborhoodPopulationInfo(positions
 
 forest::list_positions_t forest::World::GetNeighborhood(positions_t pos){
 	return this->m_map.GetNeighborhood(pos);
+}
+
+void
+forest::World::MoveCharacter(std::string uid, forest::positions_t from, forest::positions_t to )
+{
+	// WARNING: only Lumberjack can move for now
+	auto it = this->m_population.lumberjacks.find(uid);
+	if( it!= this->m_population.lumberjacks.end())
+	{
+		// find the object and change its information
+		it->second->SetPositions(to);
+		// move the object on the map
+		this->m_map.SetCharacter(to, it->second->GetID());
+		this->m_map.RemoveCharacter(from, it->second->GetID());
+	}
 }

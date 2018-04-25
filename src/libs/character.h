@@ -65,6 +65,8 @@ public:
 	{
 		this->m_data = CharacterT(c.GetInfo());
 	}
+	// change the positions of the character
+	void SetPositions(positions_t new_pos) { this->m_data.positions=new_pos; }
 
 	//get the id of the character
 	// returns lvalue

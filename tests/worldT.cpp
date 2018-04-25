@@ -121,5 +121,19 @@ suite<> first("World suite", [](auto &_) {
     world->AddCharacter(CharacterE::tree, &ddata);
     expect(world->GetNeighborhoodPopulationInfo(tgt).trees.size(), equal_to(2));
   });
+  _.test("Move a Character", [](){
+    lumberjack_t data;
+    data.positions = {0,0};
+    data.ressources = 0;
+		std::unique_ptr<World> world (new World());
+    world->AddCharacter(CharacterE::lumberjack, &data);
+    auto pop_info = world->GetLocalPopulationInfo(data.positions);
+    positions_t new_pos = {1,1};
+    world->MoveCharacter(pop_info.lumberjacks[0].uid, pop_info.lumberjacks[0].positions, new_pos);
+    auto pop_expect_empty =  world->GetLocalPopulationInfo(data.positions);
+    auto pop_expect_not_empty = world->GetLocalPopulationInfo(new_pos);
+    expect(pop_expect_empty.lumberjacks.size(), equal_to(0));
+    expect(pop_expect_not_empty.lumberjacks.size(), equal_to(1));
+  });
 
 });
