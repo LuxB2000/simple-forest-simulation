@@ -67,7 +67,7 @@ suite<> first("Lumberjack suite", [] (auto &mettle){
 		// scenario: a lumberjack is located in a position without tree.
 		// All the 8 neighberhood positions contains a tree with age 4.
 		// after TimePassed is called we expect that the lumberjack has moved
-		// and we expect no more tree in that position
+		// and we expect no more tree with age>=3 in that position (others can appears due to seeding).
 		// we also expect that the ressources of the lumberjack is greater.
 		int age = 4;
 		tree_t tree1, tree2, tree3, tree4, tree5, tree6, tree7, tree8;
@@ -101,7 +101,11 @@ suite<> first("Lumberjack suite", [] (auto &mettle){
 		expect(pop_info.lumberjacks[0].positions==lumberjack.positions, equal_to(false));
 		// we expect that there is no more tree at the position of the lumberjack
 		auto exp_no_tree = world->GetLocalPopulationInfo(pop_info.lumberjacks[0].positions);
-		expect(exp_no_tree.trees.size(), equal_to(0));
+		for(auto tree : exp_no_tree.trees)
+		{
+			expect(tree.age, not_equal_to(3));
+		}
+		expect(pop_info.lumberjacks[0].ressources, greater(ressources));
 
 	});
 }); //end suite

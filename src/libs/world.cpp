@@ -39,10 +39,16 @@ void forest::World::AddCharacter(CharacterE c_type, const character_t* data ){
 		lumberjack_t* ldata = (lumberjack_t*) data;
 		LumberjackT new_l(new Lumberjack(*ldata), Lumberjack::LumberjackDel);
 		// connect the signals
+		// connect the new object with the global time.
+		this->m_global_time.connect(boost::bind(&Lumberjack::TimePassed, new_l.get()));
 		// let the lumberjack move along the map
 		new_l->moving_sig.connect(boost::bind(&World::MoveCharacter, this, _1, _2, _3));
 		// let the lumberjack remove trees.
 		new_l->cutting_sig.connect(boost::bind(&World::RemoveCharacter, this, _1));
+		// let the new object ask for information about the map
+		new_l->ask_neigh_sig.connect(boost::bind(&World::GetNeighborhood, this, _1));
+		// let the new object ask for information population on particular position
+		new_l->ask_info_pop_sig.connect(boost::bind(&World::GetLocalPopulationInfo, this, _1));
 		// record the character on the map.
 		this->m_map.SetCharacter(ldata->positions, new_l->GetID());
 		// insert the new element to the global population

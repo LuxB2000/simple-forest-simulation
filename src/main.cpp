@@ -16,7 +16,7 @@ int main(){
 	world->AddCharacter(CharacterE::tree, &a_tree);
 	world->AddCharacter(CharacterE::lumberjack, &a_lumberjack);
 
-	auto pop = world->StartWorld(5); // run the simulation of the world with 5 periodes of time. 
+	auto pop = world->StartWorld(20); // run the simulation of the world with 5 periodes of time. 
 	std::cout << "At the end we have " << pop.trees.size() << " trees." << std::endl;
 	for(auto tree: pop.trees )
 	{

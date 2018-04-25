@@ -34,6 +34,33 @@ void forest::Lumberjack::Cutting(std::string uid)
 void
 forest::Lumberjack::TimePassed()
 {
+	// find the local neighborhood
+	auto neigh = this->ask_neigh_sig(this->GetInfo().positions);
+	// @TODO: create a general function in Character
+	if(neigh->size() > 0)
+	{
+		// randomly choose a location
+		std::uniform_int_distribution<> dis(1, neigh->size()-1);
+		auto randn = dis(this->gen);
+		auto rpos = neigh->at(randn);
+		// move to the location
+		this->Moving(rpos);
+		// ask if there is a tree
+		auto pop_info = this->ask_info_pop_sig(rpos);
+		if(pop_info->trees.size() > 0)
+		{
+			// find the first tree with age >=3 then, cut it.
+			for(auto tree: pop_info->trees)
+			{
+				if(tree.age>=3)
+				{
+					this->Cutting(tree.uid);
+					this->m_data.ressources += tree.age;
+					break;
+				}
+			}
+		}
+	}
 
 }
 
