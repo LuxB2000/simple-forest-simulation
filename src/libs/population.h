@@ -14,7 +14,7 @@ enum CharacterE{
 
 // a Character is defined by an id and a position.
 struct character_t{
-	//character_t(): positions(positions_t(-1,-1)), uid(""){}
+	character_t(): uid(""){}
 	positions_t positions;
 	std::string uid;
 };
@@ -35,7 +35,8 @@ struct tree_t : character_t{
 std::ostream& operator<<(std::ostream& os, const tree_t t);
 
 struct lumberjack_t : character_t{
-	int ressources;
+	lumberjack_t() : character_t(), ressources(0) {}
+	double ressources;
 };
 // note, implemented in lumberjack.cpp
 std::ostream& operator<<(std::ostream& os, const lumberjack_t l);

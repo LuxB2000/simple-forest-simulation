@@ -47,9 +47,10 @@ forest::Lumberjack::TimePassed()
 		this->Moving(rpos);
 		// ask if there is a tree
 		auto pop_info = this->ask_info_pop_sig(rpos);
+		// TODO: WARNING: NOT SAFE !! If several lumberjacks two can ask for the
+		// same tree. Need a confirmation from the world that the tree is well cut.
 		if(pop_info->trees.size() > 0)
 		{
-			// find the first tree with age >=3 then, cut it.
 			tree_t tree_to_cut;
 			for(auto tree: pop_info->trees)
 			{
@@ -63,11 +64,6 @@ forest::Lumberjack::TimePassed()
 					if( tree_to_cut.height < tree.height ){
 						tree_to_cut = tree;
 					}
-					/*
-					this->Cutting(tree.uid);
-					this->m_data.ressources += tree.age;
-					break;
-					*/
 				}
 			}
 			if( tree_to_cut.uid.size() > 0)
