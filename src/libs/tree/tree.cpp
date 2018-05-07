@@ -29,6 +29,7 @@ forest::Tree::~Tree()
 void forest::Tree::TimePassed()
 {
 	this->m_data.age += 1 ;
+	this->m_data.height += this->m_data.characteristics.growing_rate;
 	// get the local neighborhood
 	auto neigh = this->ask_neigh_sig(this->m_data.positions);
 	//std::cout << ">> UID: " << this->GetID() << std::endl;
@@ -68,5 +69,6 @@ void forest::Tree::Seeding(forest::positions_t pos)
 	tree_t new_t;
 	new_t.age = 0;
 	new_t.positions = pos;
+	new_t.characteristics = this->m_data.characteristics;
 	this->add_sig(CharacterE::tree, &new_t);
 }

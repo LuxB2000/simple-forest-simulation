@@ -21,7 +21,8 @@ struct character_t{
 
 // a tree has an age and some characterisitics
 struct tree_characteristics_t {
-	float proba_seeding; // probablity of seeding at each epoch
+	tree_characteristics_t() : proba_seeding(1), growing_rate(1) {}
+	float proba_seeding; // probablity of seeding at each epoch, 0<= proba =>1
 	float growing_rate; // rate of growing at each epoch
 };
 struct tree_t : character_t{

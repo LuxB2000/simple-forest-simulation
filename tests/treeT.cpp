@@ -90,20 +90,21 @@ suite<> first("Tree suite", [](auto &_) {
 		std::unique_ptr<Tree> tree (new Tree(ddata));
     class CatchAnswer{
     public:
-      positions_t expect_pos;
-      CatchAnswer(positions_t pos) : expect_pos(pos) { }
+      tree_t expect_data;
+      CatchAnswer(tree_t data) : expect_data(data) { }
       void gotMessage(CharacterE c, tree_t *data){
-        expect(expect_pos==data->positions, equal_to(true));
+        expect(expect_data.positions==data->positions, equal_to(true));
+        expect(data->characteristics.growing_rate, equal_to(expect_data.characteristics.growing_rate));
       }
     };
-    CatchAnswer catcher(newT.positions);
+    CatchAnswer catcher(newT);
     tree->add_sig.connect(boost::bind(&CatchAnswer::gotMessage, catcher, _1, _2));
     tree->Seeding(newT.positions);
   });
   _.test("Time Passed", []() {
     tree_t ddata; // default data
-    ddata.positions = {0,0};
-    ddata.age = 0;
+    //ddata.positions = {0,0};
+    //ddata.age = 0;
 		std::unique_ptr<Tree> tree (new Tree(ddata));
     map_forest::map_t map(10);
     class MsgCatcher{
@@ -121,6 +122,7 @@ suite<> first("Tree suite", [](auto &_) {
 
     tree->TimePassed();
     expect(tree->GetInfo().age, equal_to(ddata.age+1));
+    expect(tree->GetInfo().height, equal_to(ddata.height+1));
   });
 });
 
