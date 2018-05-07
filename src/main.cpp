@@ -8,6 +8,9 @@ int main(){
 
 	std::unique_ptr<World> world (new World(5)); // size of the squared map
 	tree_t a_tree;
+	tree_t an_other_type_of_tree;
+	an_other_type_of_tree.positions = {4,4};
+	an_other_type_of_tree.characteristics.growing_rate = 1.5;
 	lumberjack_t a_lumberjack;
 	a_lumberjack.positions = {2,2};
 	a_lumberjack.ressources = 0;

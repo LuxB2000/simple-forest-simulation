@@ -28,7 +28,7 @@ struct tree_characteristics_t {
 struct tree_t : character_t{
 	tree_t() : character_t(), age(0), height(0){}
 	unsigned long age;
-	unsigned int height;
+	float height;
 	tree_characteristics_t characteristics;
 };
 // note, implemented in tree.cpp

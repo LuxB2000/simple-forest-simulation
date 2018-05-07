@@ -50,14 +50,31 @@ forest::Lumberjack::TimePassed()
 		if(pop_info->trees.size() > 0)
 		{
 			// find the first tree with age >=3 then, cut it.
+			tree_t tree_to_cut;
 			for(auto tree: pop_info->trees)
 			{
 				if(tree.age>=3)
 				{
+					// the first tree is the default one
+					if( tree_to_cut.uid.size() <= 0)
+					{
+						tree_to_cut = tree;
+					}
+					if( tree_to_cut.height < tree.height ){
+						tree_to_cut = tree;
+					}
+					/*
 					this->Cutting(tree.uid);
 					this->m_data.ressources += tree.age;
 					break;
+					*/
 				}
+			}
+			if( tree_to_cut.uid.size() > 0)
+			{
+				// if we find a tree to cut, cut the biggest one
+				this->Cutting(tree_to_cut.uid);
+				this->m_data.ressources += tree_to_cut.height;
 			}
 		}
 	}
