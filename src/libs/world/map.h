@@ -1,7 +1,7 @@
 #ifndef MAP__H
 #define MAP__H
 
-#include "character.h"
+#include "../character.h"
 
 namespace map_forest{
 // the map stocking which characters below to which coordinates

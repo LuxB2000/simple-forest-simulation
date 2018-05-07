@@ -1,5 +1,5 @@
 #include <mettle.hpp>
-#include "../src/libs/map.h"
+#include "../src/libs/world/map.h"
 
 using namespace mettle;
 using namespace map_forest;

@@ -1,4 +1,4 @@
-#include "libs/world.h"
+#include "libs/world/world.h"
 #include "libs/tree/tree.h"
 #include "libs/lumberjack/lumberjack.h"
 

@@ -3,9 +3,9 @@
 
 #include <boost/signals2.hpp>
 #include <boost/bind.hpp>
-#include "tree/tree.h"
+#include "../tree/tree.h"
 #include "map.h"
-#include "lumberjack/lumberjack.h"
+#include "../lumberjack/lumberjack.h"
 
 namespace forest{
 

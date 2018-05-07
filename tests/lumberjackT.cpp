@@ -1,6 +1,6 @@
 #include <mettle.hpp>
 #include "../src/libs/lumberjack/lumberjack.h"
-#include "../src/libs/world.h"
+#include "../src/libs/world/world.h"
 
 using namespace mettle;
 using namespace forest;

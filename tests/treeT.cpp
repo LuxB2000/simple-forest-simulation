@@ -1,6 +1,6 @@
 #include <mettle.hpp>
 #include "../src/libs/tree/tree.h"
-#include "../src/libs/map.h"
+#include "../src/libs/world/map.h"
 
 using namespace mettle;
 using namespace forest;
