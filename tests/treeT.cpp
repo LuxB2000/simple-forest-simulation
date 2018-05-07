@@ -6,6 +6,11 @@ using namespace mettle;
 using namespace forest;
 
 suite<> first("Tree suite", [](auto &_) {
+  _.test("positions_t default constructor", [](){
+    positions_t p;
+    expect(p._pos[0], equal_to(0));
+    expect(p._pos[1], equal_to(0));
+  });
   _.test("Test positions_t comparison", [](){
     positions_t p1 = {0,0};
     positions_t p1bis = {0,0};
@@ -50,6 +55,7 @@ suite<> first("Tree suite", [](auto &_) {
     auto recorded = tree->GetInfo();
     expect(recorded.positions.size(), equal_to(2));
     expect(recorded.age, equal_to(ddata.age));
+    expect(recorded.height, equal_to(0));
   });
   _.test("Character comparison", [](){
     tree_t ddata; // default data
@@ -84,17 +90,15 @@ suite<> first("Tree suite", [](auto &_) {
 		std::unique_ptr<Tree> tree (new Tree(ddata));
     class CatchAnswer{
     public:
-      tree_t mdata;
+      positions_t expect_pos;
+      CatchAnswer(positions_t pos) : expect_pos(pos) { }
       void gotMessage(CharacterE c, tree_t *data){
-        this->mdata = *data;//= tree_t();
-        //this->mdata.positions={};
-        //this->mdata.positions = data->positions;
+        expect(expect_pos==data->positions, equal_to(true));
       }
     };
-    CatchAnswer catcher;
+    CatchAnswer catcher(newT.positions);
     tree->add_sig.connect(boost::bind(&CatchAnswer::gotMessage, catcher, _1, _2));
     tree->Seeding(newT.positions);
-    expect(catcher.mdata.positions == newT.positions, equal_to(true));
   });
   _.test("Time Passed", []() {
     tree_t ddata; // default data

@@ -11,7 +11,7 @@ namespace forest{
 struct positions_t {
 	using pos_t = int;
 	std::vector<pos_t> _pos;
-	positions_t() : _pos(){}
+	positions_t() : _pos({0,0}){}
 	positions_t(const std::vector<int> & p) : _pos(p){}
 	positions_t(const pos_t p1, const pos_t p2 ) : _pos({p1,p2}){}
 	const auto operator[](const pos_t n) const { return _pos[n];}

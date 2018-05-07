@@ -6,7 +6,8 @@ std::ostream& forest::operator<<(std::ostream& os, const forest::tree_t t)
 	os << "Tree @{" + 
 				std::to_string(t.positions[0]) + "," + 
 				std::to_string(t.positions[1]) +
-			"} age:" + std::to_string(t.age); 
+			"} age:" + std::to_string(t.age) + ", " +
+			"height: " + std::to_string(t.height); 
 	return os;
 }
 
