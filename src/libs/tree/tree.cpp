@@ -30,23 +30,28 @@ void forest::Tree::TimePassed()
 {
 	this->m_data.age += 1 ;
 	this->m_data.height += this->m_data.characteristics.growing_rate;
-	// get the local neighborhood
-	auto neigh = this->ask_neigh_sig(this->m_data.positions);
-	//std::cout << ">> UID: " << this->GetID() << std::endl;
-	//std::cout << "I receive " << std::to_string(neigh->size()) << " potential places for my seed."<<std::endl;
-	if(neigh->size() > 0){
-		// randomly select a position
-		std::uniform_int_distribution<> dis(1, neigh->size()-1);
-		auto randn = dis(this->gen);
-		//std::cout<<"we choose the position " << randn <<std::endl;
-		auto rpos = neigh->at(randn);
-		//std::cout << "that is the position " << rpos._pos[0] << ", " << rpos._pos[1] << std::endl;
-		// if there is less than 3 trees at the position
-		auto local_pop = this->ask_info_pop_sig(rpos);
-		if(local_pop->trees.size()<3) // @TODO: make it variable
-		{
-			// plant the seed there
-			this->Seeding(rpos);
+	// compute a probablity of seeding
+	std::uniform_int_distribution<> dis(1, 100);
+	auto randn = dis(this->gen);
+	if( randn <= this->m_data.characteristics.proba_seeding*100){
+		// get the local neighborhood
+		auto neigh = this->ask_neigh_sig(this->m_data.positions);
+		//std::cout << ">> UID: " << this->GetID() << std::endl;
+		//std::cout << "I receive " << std::to_string(neigh->size()) << " potential places for my seed."<<std::endl;
+		if(neigh->size() > 0){
+			// randomly select a position
+			std::uniform_int_distribution<> dis(1, neigh->size()-1);
+			auto randn = dis(this->gen);
+			//std::cout<<"we choose the position " << randn <<std::endl;
+			auto rpos = neigh->at(randn);
+			//std::cout << "that is the position " << rpos._pos[0] << ", " << rpos._pos[1] << std::endl;
+			// if there is less than 3 trees at the position
+			auto local_pop = this->ask_info_pop_sig(rpos);
+			if(local_pop->trees.size()<3) // @TODO: make it variable
+			{
+				// plant the seed there
+				this->Seeding(rpos);
+			}
 		}
 	}
 	//std::cout << "<<" << std::endl;
