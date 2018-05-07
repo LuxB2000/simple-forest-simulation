@@ -1,5 +1,5 @@
 #include <mettle.hpp>
-#include "../src/libs/world.h"
+#include "../src/libs/world/world.h"
 #include "../src/libs/tree/tree.h"
 
 using namespace mettle;

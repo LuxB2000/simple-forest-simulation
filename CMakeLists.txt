@@ -9,7 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set (CODE_SRC_PATH ${CMAKE_SOURCE_DIR}/src)
 set (LIB_SRC_PATH ${CODE_SRC_PATH}/libs)
 set (WOLD_BUILD_PATH ${CMAKE_SOURCE_DIR}/build/src/libs) #todo: use correct variable
-set (WORLD_SRC_PATH ${LIB_SRC_PATH}) #todo: use correct variable
+set (WORLD_SRC_PATH ${LIB_SRC_PATH}/world) #todo: use correct variable
 set (TREE_SRC_PATH ${LIB_SRC_PATH}/tree) #todo: use correct variable
 set (LUMBERJACK_SRC_PATH ${LIB_SRC_PATH}/lumberjack)
 add_subdirectory(${CODE_SRC_PATH})
@@ -42,7 +42,7 @@ endforeach(test ${TESTS})
 add_custom_target(
 	testing
 	COMMAND mettle ./treeT ./lumberjackT ./mapT ./worldT  # run unit tests
-	DEPENDS worldT treeT mapT lumberjackT # ask for compilingn and linking
+	DEPENDS worldT treeT mapT lumberjackT worldT # ask for compilingn and linking
 	WORKING_DIRECTORY ./tests/ # in the build
 )
 
