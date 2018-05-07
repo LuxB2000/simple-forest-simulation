@@ -6,6 +6,10 @@ using namespace mettle;
 using namespace forest;
 
 suite<> first("Lumberjack suite", [] (auto &mettle){
+	mettle.test("lumberjack_t default data creation", [](){
+		lumberjack_t data;
+		expect(data.ressources, equal_to(0));
+	});
 	mettle.test("Lumberjack creation",[](){
 		lumberjack_t data;
 		data.positions = {0,0};
@@ -99,11 +103,11 @@ suite<> first("Lumberjack suite", [] (auto &mettle){
 
 		// we expect the lumberjack has moved
 		expect(pop_info.lumberjacks[0].positions==lumberjack.positions, equal_to(false));
-		// we expect that there is no more tree at the position of the lumberjack
+		// we expect all the trees to aged to zeros.
 		auto exp_no_tree = world->GetLocalPopulationInfo(pop_info.lumberjacks[0].positions);
 		for(auto tree : exp_no_tree.trees)
 		{
-			expect(tree.age, not_equal_to(3));
+			expect(tree.age, equal_to(0));
 		}
 		expect(pop_info.lumberjacks[0].ressources, greater(ressources));
 

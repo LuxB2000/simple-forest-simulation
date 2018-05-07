@@ -1,5 +1,5 @@
 #include "libs/world.h"
-#include "libs/tree.h"
+#include "libs/tree/tree.h"
 #include "libs/lumberjack/lumberjack.h"
 
 using namespace forest;
@@ -8,15 +8,17 @@ int main(){
 
 	std::unique_ptr<World> world (new World(5)); // size of the squared map
 	tree_t a_tree;
-	a_tree.positions = {0,0}; // position on the landsckape
-	a_tree.age = 0;
+	tree_t an_other_type_of_tree;
+	an_other_type_of_tree.positions = {4,4};
+	an_other_type_of_tree.characteristics.growing_rate = 1.5;
 	lumberjack_t a_lumberjack;
 	a_lumberjack.positions = {2,2};
 	a_lumberjack.ressources = 0;
 	world->AddCharacter(CharacterE::tree, &a_tree);
+	world->AddCharacter(CharacterE::tree, &an_other_type_of_tree);
 	world->AddCharacter(CharacterE::lumberjack, &a_lumberjack);
 
-	auto pop = world->StartWorld(20); // run the simulation of the world with 5 periodes of time. 
+	auto pop = world->StartWorld(20); // run the simulation of the world with 20 periodes of time. 
 	std::cout << "At the end we have " << pop.trees.size() << " trees." << std::endl;
 	for(auto tree: pop.trees )
 	{

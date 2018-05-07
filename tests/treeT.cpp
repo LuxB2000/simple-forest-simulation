@@ -1,11 +1,16 @@
 #include <mettle.hpp>
-#include "../src/libs/tree.h"
+#include "../src/libs/tree/tree.h"
 #include "../src/libs/map.h"
 
 using namespace mettle;
 using namespace forest;
 
 suite<> first("Tree suite", [](auto &_) {
+  _.test("positions_t default constructor", [](){
+    positions_t p;
+    expect(p._pos[0], equal_to(0));
+    expect(p._pos[1], equal_to(0));
+  });
   _.test("Test positions_t comparison", [](){
     positions_t p1 = {0,0};
     positions_t p1bis = {0,0};
@@ -50,6 +55,7 @@ suite<> first("Tree suite", [](auto &_) {
     auto recorded = tree->GetInfo();
     expect(recorded.positions.size(), equal_to(2));
     expect(recorded.age, equal_to(ddata.age));
+    expect(recorded.height, equal_to(0));
   });
   _.test("Character comparison", [](){
     tree_t ddata; // default data
@@ -84,22 +90,22 @@ suite<> first("Tree suite", [](auto &_) {
 		std::unique_ptr<Tree> tree (new Tree(ddata));
     class CatchAnswer{
     public:
-      tree_t mdata;
+      tree_t expect_data;
+      CatchAnswer(tree_t data) : expect_data(data) { }
       void gotMessage(CharacterE c, tree_t *data){
-        this->mdata = *data;//= tree_t();
-        //this->mdata.positions={};
-        //this->mdata.positions = data->positions;
+        expect(expect_data.positions==data->positions, equal_to(true));
+        expect(data->characteristics.growing_rate, equal_to(expect_data.characteristics.growing_rate));
       }
     };
-    CatchAnswer catcher;
+    CatchAnswer catcher(newT);
     tree->add_sig.connect(boost::bind(&CatchAnswer::gotMessage, catcher, _1, _2));
     tree->Seeding(newT.positions);
-    expect(catcher.mdata.positions == newT.positions, equal_to(true));
   });
   _.test("Time Passed", []() {
     tree_t ddata; // default data
-    ddata.positions = {0,0};
-    ddata.age = 0;
+    ddata.characteristics.growing_rate = 2.5;
+    //ddata.positions = {0,0};
+    //ddata.age = 0;
 		std::unique_ptr<Tree> tree (new Tree(ddata));
     map_forest::map_t map(10);
     class MsgCatcher{
@@ -117,6 +123,7 @@ suite<> first("Tree suite", [](auto &_) {
 
     tree->TimePassed();
     expect(tree->GetInfo().age, equal_to(ddata.age+1));
+    expect(tree->GetInfo().height, equal_to(ddata.height+ddata.characteristics.growing_rate));
   });
 });
 
