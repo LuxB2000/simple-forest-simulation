@@ -1,7 +1,7 @@
 #ifndef TREE__H
 #define TREE__H
 
-#include "character.h"
+#include "../character.h"
 
 namespace forest{
 /*

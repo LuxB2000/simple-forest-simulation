@@ -1,5 +1,5 @@
 #include <mettle.hpp>
-#include "../src/libs/tree.h"
+#include "../src/libs/tree/tree.h"
 #include "../src/libs/map.h"
 
 using namespace mettle;
