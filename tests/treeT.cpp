@@ -103,6 +103,7 @@ suite<> first("Tree suite", [](auto &_) {
   });
   _.test("Time Passed", []() {
     tree_t ddata; // default data
+    ddata.characteristics.growing_rate = 2.5;
     //ddata.positions = {0,0};
     //ddata.age = 0;
 		std::unique_ptr<Tree> tree (new Tree(ddata));
@@ -122,7 +123,7 @@ suite<> first("Tree suite", [](auto &_) {
 
     tree->TimePassed();
     expect(tree->GetInfo().age, equal_to(ddata.age+1));
-    expect(tree->GetInfo().height, equal_to(ddata.height+1));
+    expect(tree->GetInfo().height, equal_to(ddata.height+ddata.characteristics.growing_rate));
   });
 });
 
