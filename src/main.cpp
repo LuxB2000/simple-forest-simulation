@@ -15,6 +15,7 @@ int main(){
 	a_lumberjack.positions = {2,2};
 	a_lumberjack.ressources = 0;
 	world->AddCharacter(CharacterE::tree, &a_tree);
+	world->AddCharacter(CharacterE::tree, &an_other_type_of_tree);
 	world->AddCharacter(CharacterE::lumberjack, &a_lumberjack);
 
 	auto pop = world->StartWorld(20); // run the simulation of the world with 20 periodes of time. 
