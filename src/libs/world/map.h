@@ -16,7 +16,7 @@ struct map_t{
 	std::vector<list_charact_t> _map;
 	int _mapSz;
 	forest::list_positions_t _neigh1;
-	map_t(int sz=0) : 
+	map_t(int sz = 0) : 
 		_mapSz(sz),
 		_neigh1( // constant, used to compute a local neighborhood
 			{
@@ -26,8 +26,8 @@ struct map_t{
 				{1,-1},{-1,-1}
 			})
 	{
-		_map.resize(_mapSz*_mapSz);
-		for(auto it=_map.begin(); it!=_map.end(); it++)
+		_map.resize(_mapSz * _mapSz);
+		for(auto it = _map.begin(); it != _map.end(); it++)
 		{
 			it->resize(0);
 		}
@@ -37,7 +37,7 @@ struct map_t{
 	// compute the position in the _map based on position_t
 	inline const int _compute_coord(forest::positions_t pos) const
 	{
-		return pos[0]+pos[1]*_mapSz;
+		return pos[0] + pos[1] * _mapSz;
 	}
 	// Set a character in the map
 	void SetCharacter(forest::positions_t pos, std::string uid){
@@ -46,7 +46,13 @@ struct map_t{
 	// remove a character from the map
 	void RemoveCharacter(forest::positions_t pos, std::string uid)
 	{
-		_map[_compute_coord(pos)].erase(std::remove(_map[_compute_coord(pos)].begin(),_map[_compute_coord(pos)].end(), uid), _map[_compute_coord(pos)].end());;
+		_map[_compute_coord(pos)].erase(
+			std::remove(
+				_map[_compute_coord(pos)].begin(),
+				_map[_compute_coord(pos)].end(),
+				uid),
+			_map[_compute_coord(pos)].end()
+		);;
 	}
 	// get the list of IDs at a position
 	const list_charact_t GetCharacters(forest::positions_t pos) const 

@@ -18,7 +18,7 @@ void forest::World::AddCharacter(CharacterE c_type, const character_t* data ){
 	if ( c_type == CharacterE::tree )
 	{
 		// convert the data
-		forest::tree_t* t_data= (forest::tree_t*)(data); //todo: check
+		forest::tree_t* t_data = (forest::tree_t*)(data); //todo: check
 		// smart pointer.
 		Tree::TreeT new_t(new Tree(*t_data), forest::Tree::TreeDel);
 		// connect the new object with the global time.

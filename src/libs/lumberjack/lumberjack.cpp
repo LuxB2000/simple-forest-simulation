@@ -10,12 +10,14 @@ std::ostream& forest::operator<<(std::ostream& os, const forest::lumberjack_t l)
 	return os;
 }
 
-forest::Lumberjack::Lumberjack(const lumberjack_t &data) : Character<forest::lumberjack_t>(data)
+forest::Lumberjack::Lumberjack(const lumberjack_t &data):
+	Character<forest::lumberjack_t>(data)
 {
 
 }
 
-forest::Lumberjack::Lumberjack(const Lumberjack &l) : Character<forest::lumberjack_t>(l.GetInfo())
+forest::Lumberjack::Lumberjack(const Lumberjack &l):
+	Character<forest::lumberjack_t>(l.GetInfo())
 {
 
 }
@@ -40,7 +42,7 @@ forest::Lumberjack::TimePassed()
 	if(neigh->size() > 0)
 	{
 		// randomly choose a location
-		std::uniform_int_distribution<> dis(1, neigh->size()-1);
+		std::uniform_int_distribution<> dis(1, neigh->size() - 1);
 		auto randn = dis(this->gen);
 		auto rpos = neigh->at(randn);
 		// move to the location
@@ -54,7 +56,7 @@ forest::Lumberjack::TimePassed()
 			tree_t tree_to_cut;
 			for(auto tree: pop_info->trees)
 			{
-				if(tree.age>=3)
+				if(tree.age >= 3)
 				{
 					// the first tree is the default one
 					if( tree_to_cut.uid.size() <= 0)
